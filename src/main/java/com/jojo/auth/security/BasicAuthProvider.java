@@ -1,14 +1,15 @@
-package security;
+package com.jojo.auth.security;
 
 import io.vertx.core.AsyncResult;
 import io.vertx.core.Future;
 import io.vertx.core.Handler;
 import io.vertx.core.json.JsonObject;
-import io.vertx.ext.auth.AuthProvider;
 import io.vertx.ext.auth.User;
 import io.vertx.ext.auth.authentication.AuthenticationProvider;
 import io.vertx.ext.auth.authentication.Credentials;
-import io.vertx.ext.auth.authorization.Authorization;
+import io.vertx.ext.auth.impl.UserImpl;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 import java.nio.charset.StandardCharsets;
 import java.util.Base64;
@@ -18,7 +19,7 @@ import java.util.Map;
 
 public class BasicAuthProvider implements AuthenticationProvider {
 
-    // In-memory user store (replace with a proper database in a real-world scenario)
+    private static final Logger log = LogManager.getLogger(BasicAuthProvider.class.getName());
     private final Map<String, String> users = new HashMap<>();
 
     public BasicAuthProvider() {
@@ -28,6 +29,7 @@ public class BasicAuthProvider implements AuthenticationProvider {
         // Add more users as needed
     }
 
+
     @Override
     public void authenticate(JsonObject credentials, Handler<AsyncResult<User>> resultHandler) {
     }
@@ -35,8 +37,8 @@ public class BasicAuthProvider implements AuthenticationProvider {
     @Override
     public void authenticate(Credentials authInfo, Handler<AsyncResult<User>> resultHandler) {
         String authHeader = authInfo.toHttpAuthorization();
-        System.out.println(authHeader);
-        System.out.println(resultHandler);
+        log.info("Auth header parsed is: {}", authHeader);
+        log.info("Auth Info  parsed is: {}", authInfo.toJson());
         if (authHeader == null || !authHeader.startsWith("Basic ")) {
             // No or invalid Authorization header
             resultHandler.handle(Future.failedFuture("Invalid or missing Authorization header"));
@@ -73,22 +75,19 @@ public class BasicAuthProvider implements AuthenticationProvider {
     }
 
     // A simple User class implementation
-    private class MyUser implements User {
-        private final String username;
+    public static class MyUser extends UserImpl {
 
-        MyUser(String username) {
+        final private String username;
+
+        public MyUser(String username) {
             this.username = username;
         }
 
         @Override
         public JsonObject attributes() {
-            return null;
+            return new JsonObject();
         }
 
-        @Override
-        public User isAuthorized(Authorization authorization, Handler<AsyncResult<Boolean>> handler) {
-            return null;
-        }
 
         @Override
         public JsonObject principal() {
@@ -96,13 +95,9 @@ public class BasicAuthProvider implements AuthenticationProvider {
         }
 
         @Override
-        public void setAuthProvider(AuthProvider authProvider) {
-
-        }
-
-        @Override
         public User merge(User user) {
-            return null;
+            // Implement merging logic if needed
+            return this;
         }
     }
 }

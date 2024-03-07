@@ -1,0 +1,35 @@
+openapi: 3.0.0
+info:
+  title: Vert.x Auth API
+  version: 1.0.0
+paths:
+  /api/payload:
+    get:
+      operationId: getUserName
+      summary: Get Payload Information
+      security:
+        - basicAuth: []
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json:
+              example:
+                firstName: John
+                lastName: Doe
+components:
+  schemas:
+    Name:
+      type: object
+      properties:
+        firstName:
+          type: string
+        lastName:
+          type: string
+      example:
+        firstName: John
+        lastName: Doe
+  securitySchemes:
+    basicAuth:
+      type: http
+      scheme: basic
