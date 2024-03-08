@@ -4,7 +4,7 @@ This repository contains a sample Vert.x application demonstrating the integrati
 
 ## Prerequisites
 
-- Java 8 or later
+- Java 17 or later
 - Maven
 - Vert.x 4.5.4
 
