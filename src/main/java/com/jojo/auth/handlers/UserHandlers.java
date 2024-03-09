@@ -55,17 +55,11 @@ public class UserHandlers {
                     if (response.statusCode() == 200) {
                         log.info("Received the payload from server");
                         Optional.of(extractNameFromResponse(response.bodyAsString()))
-                                .ifPresentOrElse(
-                                        promise::complete,
-                                        () -> promise.fail("Failed to fetch the data")
-                                );
-                    }
-                })
-                .onFailure(err -> {
+                                .ifPresentOrElse(promise::complete, () -> promise.fail("Failed to fetch the data"));}
+                }).onFailure(err -> {
                     log.error("Something went wrong", err);
                     promise.fail("Failed to fetch the data");
                 });
-
         return promise.future();
     }
 

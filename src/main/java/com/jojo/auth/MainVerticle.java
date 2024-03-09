@@ -10,6 +10,7 @@ import io.vertx.ext.web.Router;
 import io.vertx.ext.web.handler.BasicAuthHandler;
 import io.vertx.ext.web.openapi.RouterBuilder;
 
+import io.vertx.micrometer.PrometheusScrapingHandler;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -36,6 +37,8 @@ public class MainVerticle extends AbstractVerticle {
                     routerBuilder.securityHandler("basicAuth", basicAuthHandler);
 
                     Router router = routerBuilder.createRouter();
+
+                    router.route("/metrics").handler(PrometheusScrapingHandler.create());
 
                     HttpServerOptions httpOptions = new HttpServerOptions();
 
