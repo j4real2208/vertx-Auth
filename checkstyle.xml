@@ -5,11 +5,11 @@
 <module name="Checker">
     <!-- Add your Checkstyle rules here -->
     <module name="TreeWalker">
+        <module name="UnusedImports"/>
         <module name="Indentation">
             <property name="basicOffset" value="4"/>
             <property name="braceAdjustment" value="0"/>
             <property name="caseIndent" value="4"/>
         </module>
-        <!-- Add more modules/rules as needed -->
     </module>
 </module>
