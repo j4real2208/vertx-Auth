@@ -2,6 +2,7 @@ package com.jojo.auth.security;
 import io.vertx.core.Vertx;
 import io.vertx.core.json.JsonObject;
 import io.vertx.ext.auth.User;
+import io.vertx.ext.auth.authentication.AuthenticationProvider;
 import io.vertx.ext.auth.authentication.Credentials;
 import io.vertx.ext.auth.authentication.UsernamePasswordCredentials;
 import io.vertx.ext.web.RoutingContext;
@@ -10,12 +11,12 @@ import io.vertx.ext.web.handler.AuthenticationHandler;
 import java.nio.charset.StandardCharsets;
 import java.util.Base64;
 
-public class MyAuthenticationHandler implements AuthenticationHandler {
+public class CustomAuthenticationHandler implements AuthenticationHandler {
 
     private final Vertx vertx; // Reference to the Vertx instance
-    private final BasicAuthProvider authenticationProvider; // Your custom authentication provider
+    private final AuthenticationProvider authenticationProvider; // Your custom authentication provider
 
-    public MyAuthenticationHandler(Vertx vertx, BasicAuthProvider authenticationProvider) {
+    public CustomAuthenticationHandler(Vertx vertx, AuthenticationProvider authenticationProvider) {
         this.vertx = vertx;
         this.authenticationProvider = authenticationProvider;
     }
