@@ -1,31 +1,28 @@
 package com.jojo.auth.security;
 
+import com.jojo.auth.data.DatabaseManager;
 import io.vertx.core.AsyncResult;
 import io.vertx.core.Future;
 import io.vertx.core.Handler;
+import io.vertx.core.Vertx;
 import io.vertx.core.json.JsonObject;
 import io.vertx.ext.auth.User;
 import io.vertx.ext.auth.authentication.AuthenticationProvider;
 import io.vertx.ext.auth.authentication.Credentials;
+import io.vertx.ext.auth.authentication.UsernamePasswordCredentials;
 import io.vertx.ext.auth.impl.UserImpl;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
-
-import java.nio.charset.StandardCharsets;
-import java.util.Base64;
-import java.util.HashMap;
-import java.util.Map;
 
 
 public class BasicAuthProvider implements AuthenticationProvider {
 
     private static final Logger log = LogManager.getLogger(BasicAuthProvider.class.getName());
-    private final Map<String, String> users = new HashMap<>();
+    private final Vertx vertx;
 
-    public BasicAuthProvider() {
-        // Add some sample users (username, password)
-        users.put("user1", "password1");
-        users.put("user2", "password2");
+    public BasicAuthProvider(Vertx vertx) {
+
+        this.vertx = vertx;
         // Add more users as needed
     }
 
@@ -36,42 +33,36 @@ public class BasicAuthProvider implements AuthenticationProvider {
 
     @Override
     public void authenticate(Credentials authInfo, Handler<AsyncResult<User>> resultHandler) {
-        String authHeader = authInfo.toHttpAuthorization();
-        log.info("Auth header parsed is: {}", authHeader);
-        log.info("Auth Info  parsed is: {}", authInfo.toJson());
-        if (authHeader == null || !authHeader.startsWith("Basic ")) {
-            // No or invalid Authorization header
-            resultHandler.handle(Future.failedFuture("Invalid or missing Authorization header"));
-            return;
-        }
+        if (authInfo instanceof UsernamePasswordCredentials) {
+            String username = ((UsernamePasswordCredentials) authInfo).getUsername();
+            String password = ((UsernamePasswordCredentials) authInfo).getPassword();
+            log.info("Entered to authenticate in BasicAuth for Principal: {}", username);
 
-        String base64Credentials = authHeader.substring("Basic ".length()).trim();
-        byte[] decodedCredentials = Base64.getDecoder().decode(base64Credentials);
-        String credentials = new String(decodedCredentials, StandardCharsets.UTF_8);
-
-        String[] parts = credentials.split(":", 2);
-        if (parts.length != 2) {
-            // Invalid credentials format
-            resultHandler.handle(Future.failedFuture("Invalid credentials format"));
-            return;
-        }
-
-        String username = parts[0];
-        String password = parts[1];
-
-        // Check if the provided credentials are valid
-        if (isValidCredentials(username, password)) {
-            // Create a simple User instance
-            User authenticatedUser = new MyUser(username);
-            resultHandler.handle(Future.succeededFuture(authenticatedUser));
+            DatabaseManager.getUserByUsername(username, vertx, queryResult -> {
+                if (queryResult.succeeded()) {
+                    if(queryResult.result() == null) {
+                        resultHandler.handle(Future.failedFuture("USER not in DB"));
+                    }
+                    else if (isValidCredentials(username, password, queryResult.result())) {
+                        // Create a simple User instance
+                        User authenticatedUser = new MyUser(username);
+                        resultHandler.handle(Future.succeededFuture(authenticatedUser));
+                    } else {
+                        resultHandler.handle(Future.failedFuture("Authentication failed"));
+                    }
+                } else {
+                    resultHandler.handle(Future.failedFuture("Unable to query the User Details for UserDB"));
+                }
+            });
         } else {
-            resultHandler.handle(Future.failedFuture("Authentication failed"));
+            resultHandler.handle(Future.failedFuture("Unsupported credentials type"));
         }
     }
 
-    private boolean isValidCredentials(String username, String password) {
+    private boolean isValidCredentials(String username, String password, JsonObject queryDb) {
         // Check if the username exists and the password matches
-        return users.containsKey(username) && users.get(username).equals(password);
+//        return users.containsKey(username) && users.get(username).equals(password);
+        return queryDb.getString("username").equals(username) && queryDb.getString("password").equals(password);
     }
 
     // A simple User class implementation

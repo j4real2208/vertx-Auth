@@ -1,13 +1,13 @@
 package com.jojo.auth;
 
+import com.jojo.auth.data.DatabaseManager;
 import com.jojo.auth.handlers.UserHandlers;
 import com.jojo.auth.security.BasicAuthProvider;
+import com.jojo.auth.security.MyAuthenticationHandler;
 import io.vertx.core.AbstractVerticle;
 import io.vertx.core.Promise;
 import io.vertx.core.http.HttpServerOptions;
-import io.vertx.ext.auth.authentication.AuthenticationProvider;
 import io.vertx.ext.web.Router;
-import io.vertx.ext.web.handler.BasicAuthHandler;
 import io.vertx.ext.web.openapi.RouterBuilder;
 
 import io.vertx.micrometer.PrometheusScrapingHandler;
@@ -26,15 +26,16 @@ public class MainVerticle extends AbstractVerticle {
 
         RouterBuilder.create(vertx, "openapi-spec/vertx.yaml")
                 .onSuccess(routerBuilder -> {
-                    // Create a BasicAuthProvider instance
-                    AuthenticationProvider authProvider = new BasicAuthProvider();
 
                     // Create a BasicAuthHandler using the BasicAuthProvider
-                    BasicAuthHandler basicAuthHandler = BasicAuthHandler.create(authProvider);
+                    MyAuthenticationHandler basicAuthHandler = new MyAuthenticationHandler(vertx, new BasicAuthProvider(vertx));
 
                     addRoutes(routerBuilder);
 
                     routerBuilder.securityHandler("basicAuth", basicAuthHandler);
+
+                    DatabaseManager.getClient(vertx);
+                    DatabaseManager.initializeDatabase(vertx);
 
                     Router router = routerBuilder.createRouter();
 

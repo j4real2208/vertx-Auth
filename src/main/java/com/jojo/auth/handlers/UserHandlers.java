@@ -23,6 +23,7 @@ public class UserHandlers {
     }
     private static final Logger log = LogManager.getLogger(UserHandlers.class.getName());
     private void handlePayloadRequest(RoutingContext routingContext) {
+        log.info("Information of the current incoming user: {}", routingContext.user().principal().getString("username"));
         getPayloadInformation(routingContext)
                 .onSuccess(name -> {
                     log.info("The user we had processed is: " + name.getFirstName() + " and last name: " + name.getLastName());

@@ -18,7 +18,7 @@
         <maven-shade-plugin.version>3.2.1</maven-shade-plugin.version>
         <exec-maven-plugin.version>3.0.0</exec-maven-plugin.version>
         <jackson-databind.version>2.16.1</jackson-databind.version>
-        <log4j.version>2.22.1</log4j.version>
+        <log4j.version>2.23.1</log4j.version>
         <lombok.version>1.18.30</lombok.version>
     </properties>
 
@@ -124,13 +124,24 @@
         <dependency>
             <groupId>io.micrometer</groupId>
             <artifactId>micrometer-registry-prometheus</artifactId>
-            <version>1.12.3</version>
+            <version>1.12.4</version>
         </dependency>
         <dependency>
             <groupId>io.micrometer</groupId>
             <artifactId>micrometer-registry-jmx</artifactId>
-            <version>1.12.3</version>
+            <version>1.12.4</version>
         </dependency>
+        <dependency>
+            <groupId>io.vertx</groupId>
+            <artifactId>vertx-jdbc-client</artifactId>
+            <version>4.5.4</version>
+        </dependency>
+        <dependency>
+            <groupId>org.hsqldb</groupId>
+            <artifactId>hsqldb</artifactId>
+            <version>2.7.2</version>
+        </dependency>
+
     </dependencies>
 
     <build>

@@ -48,10 +48,10 @@ download_and_unpack() {
 }
 
 # Download and unpack Prometheus
-download_and_unpack "$PROMETHEUS_URL" "$PROMETHEUS_DIR" "$PROMETHEUS_TAR"
+#download_and_unpack "$PROMETHEUS_URL" "$PROMETHEUS_DIR" "$PROMETHEUS_TAR"
 
 # Download and unpack Grafana
-download_and_unpack "$GRAFANA_URL" "$GRAFANA_DIR" "$GRAFANA_TAR"
+#download_and_unpack "$GRAFANA_URL" "$GRAFANA_DIR" "$GRAFANA_TAR"
 
 # Download JMX jars
 download_and_unpack "$JMX_URL" "$JMX_DIR" "$JMX_TAR"
