@@ -3,10 +3,12 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Login Required Page</title>
+    <title>Login Required Page 🚀</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Mononerd&display=swap">
     <style>
         body {
-            font-family: Arial, sans-serif;
+            font-family: 'Mononerd', monospace;
             background-color: #f0f0f0;
             margin: 0;
             padding: 0;
@@ -27,33 +29,33 @@
             margin-bottom: 20px;
             color: #333;
         }
-        a {
-            text-decoration: none;
-            padding: 10px 20px;
-            border-radius: 5px;
-            background-color: #007bff;
-            color: #fff;
-            font-weight: bold;
-            transition: background-color 0.3s;
+        p {
+            margin-bottom: 20px;
         }
-        a:hover {
-            background-color: #0056b3;
+        .title-image {
+            max-width: 200px;
+            margin-bottom: 20px;
         }
     </style>
 </head>
 <body>
 <div class="container">
-    <h2>Welcome <span id="userName"></span>!</h2>
-    <p>This is your personalized page.</p>
-    <a href="/logout">Logout</a>
+    <h2 class="display-5">Welcome <span id="userName"></span>! 🎉</h2>
+    <p class="lead">This is your personalized page. Enjoy your stay! 😊</p>
+    <a href="/logout" class="btn btn-primary btn-lg">Logout</a>
 </div>
 
 <script>
+    // Fetch Values from session storage
+    let username = sessionStorage.getItem("username");
+    let password = sessionStorage.getItem("password");
+    console.log(username)
+    console.log(password)
     // Fetch user information from API endpoint
     fetch('/api/payload', {
         credentials: 'include',
         headers: {
-            'Authorization': 'Basic ' + btoa('user1:password1') // Replace username and password with actual values
+            'Authorization': 'Basic ' + btoa(`${username}:${password}`) // Replace username and password with actual values
         }
     })
     .then(response => response.json())

@@ -94,7 +94,7 @@
 <body>
 <div class="login-container">
     <h2>Please login</h2>
-    <form action="/loginhandler" method="post">
+    <form action="/loginhandler" method="post" onsubmit="handleFormSubmission(this)">
         <div class="form-group">
             <label for="username">Username:</label>
             <input type="text" id="username" name="username" required>
@@ -133,6 +133,8 @@
 </div>
 
 <script>
+
+
     // Get the modal
     var modal = document.getElementById('myModal');
 
@@ -154,6 +156,20 @@
         if (event.target == modal) {
             modal.style.display = "none";
         }
+    }
+
+    // Function to handle form submission
+    function handleFormSubmission(form) {
+        // Get username and password
+        var username = form.elements["username"].value;
+        var password = form.elements["password"].value;
+
+        console.log(username)
+        console.log(password)
+
+        // Store username and password in session storage
+        sessionStorage.setItem("username", username);
+        sessionStorage.setItem("password", password);
     }
 </script>
 
