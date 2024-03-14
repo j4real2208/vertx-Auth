@@ -1,7 +1,5 @@
 package com.jojo.auth;
 
-
-
 import io.micrometer.core.instrument.Meter;
 import io.micrometer.core.instrument.config.MeterFilter;
 import io.micrometer.core.instrument.distribution.DistributionStatisticConfig;
@@ -18,6 +16,11 @@ import io.vertx.micrometer.backends.BackendRegistries;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+
 public class MyMain {
     private static final Logger log = LogManager.getLogger(MyMain.class.getName());
 
@@ -30,6 +33,9 @@ public class MyMain {
                 .setMetricsOptions(metricsOptions);
 
         final Vertx vertx = Vertx.vertx(vertxOptions);
+
+        setupCertificates(vertx);
+
 
         PrometheusMeterRegistry registry = (PrometheusMeterRegistry) BackendRegistries.getDefaultNow();
 
@@ -51,6 +57,47 @@ public class MyMain {
                 System.exit(1);
             }
         });
+    }
+
+    private static void setupCertificates(Vertx vertx) {
+        vertx.executeBlocking(blockingCodeHandler -> {
+            try {
+                // Run your bash script here
+                ProcessBuilder processBuilder = new ProcessBuilder("sh", "src/main/resources/cert/executeCert.sh");
+                processBuilder.redirectErrorStream(true); // Merge stdout and stderr
+                Process process = processBuilder.start();
+
+                // Print the output of the script
+                printScriptOutput(process.getInputStream());
+
+                // Wait for the script to finish
+                int exitCode = process.waitFor();
+
+                // Log the exit code
+                System.out.println("Script execution finished with exit code: " + exitCode);
+
+                blockingCodeHandler.complete();
+            } catch (Exception e) {
+                blockingCodeHandler.fail(e);
+            }
+        }, resultHandler -> {
+                if (resultHandler.succeeded()) {
+                    System.out.println("Script execution completed successfully");
+                } else {
+                    System.err.println("Script execution failed: " + resultHandler.cause().getMessage());
+                }
+            });
+    }
+
+    private static void printScriptOutput(InputStream inputStream) {
+        try (BufferedReader reader = new BufferedReader(new InputStreamReader(inputStream))) {
+            String line;
+            while ((line = reader.readLine()) != null) {
+                System.out.println("Script output: " + line);
+            }
+        } catch (IOException e) {
+            System.err.println("Error reading script output: " + e.getMessage());
+        }
     }
 
     static Future<String> run(final Vertx vertx) {

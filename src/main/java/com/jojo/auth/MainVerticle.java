@@ -7,6 +7,7 @@ import com.jojo.auth.security.CustomAuthenticationHandler;
 import io.vertx.core.AbstractVerticle;
 import io.vertx.core.Promise;
 import io.vertx.core.http.HttpServerOptions;
+import io.vertx.core.net.PemKeyCertOptions;
 import io.vertx.ext.web.Router;
 import io.vertx.ext.web.handler.BodyHandler;
 import io.vertx.ext.web.handler.FormLoginHandler;
@@ -62,8 +63,14 @@ public class MainVerticle extends AbstractVerticle {
                     // Static files handler
                     router.route().handler(StaticHandler.create("webroot"));
 
+                    HttpServerOptions options = new HttpServerOptions()
+                            .setSsl(true)
+                            .setKeyCertOptions(new PemKeyCertOptions()
+                                    .setCertPath("src/main/resources/cert/certificates/server.crt")
+                                    .setKeyPath("src/main/resources/cert/certificates/server.key"));
+
                     // Start the HTTP server
-                    vertx.createHttpServer(new HttpServerOptions())
+                    vertx.createHttpServer(options)
                             .requestHandler(router)
                             .listen(8888)
                             .onSuccess(http -> {

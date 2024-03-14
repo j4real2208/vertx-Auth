@@ -19,3 +19,6 @@ target/
 /utilities/jmx_prometheus/
 /utilities/grafana/
 /utilities/prometheus/
+
+#Cert
+src/main/resources/cert/certificates/
