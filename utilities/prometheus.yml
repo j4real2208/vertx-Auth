@@ -28,10 +28,10 @@ scrape_configs:
   - job_name: 'jmx_reports'
     scrape_interval: 2s
     static_configs:
-      - targets: [ '192.168.68.117:12345' ]
+      - targets: [ 'YourHostIP:12345' ]
   - job_name: 'vertx-8888'
     scrape_interval: 1s
     static_configs:
-      - targets: ['192.168.68.117:8888']
+      - targets: ['YourHostIP:8888']
     # metrics_path defaults to '/metrics'
     # scheme defaults to 'http'.
