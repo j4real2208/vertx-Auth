@@ -30,8 +30,10 @@ scrape_configs:
     static_configs:
       - targets: [ 'YourHostIP:12345' ]
   - job_name: 'vertx-8888'
+    scheme: https
     scrape_interval: 1s
+    tls_config:
+      insecure_skip_verify: true
     static_configs:
-      - targets: ['YourHostIP:8888']
-    # metrics_path defaults to '/metrics'
-    # scheme defaults to 'http'.
+        - targets: [ 'YourHostIP:8888' ]
+

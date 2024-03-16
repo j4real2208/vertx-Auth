@@ -60,21 +60,21 @@ echo "------Downloaded and unpacked Prometheus, Grafana, and JMX.----"
 
 cd ..
 
-mvn clean package  # Build the Maven project
+mvn clean package -DskipTests  # Build the Maven project
 
 HOST_IP=$(ipconfig getifaddr en0 | awk '{print $NF}')  # Get host IP address
 
 # Update the Prometheus YAML file using sed
 sed -i '' "s/YourHostIP/$HOST_IP/g" ./utilities/prometheus.yml
 
+# Update the Cet Script
+sed -i '' "s/YourHostIP/$HOST_IP/g" src/main/resources/cert/executeCert.sh
+
 # Build the vertx app image
 docker image build -t java-vertx-sample:"$TAG" .
 
-# Run the vertx app container
-docker run -d -p 8888:8888 -p 12345:12345 java-vertx-sample:"$TAG"
+#Update in docker compose file
+sed -i '' "s/YourImageTag/$TAG/g" docker-compose.yml
 
-# Run Prometheus container with mounted YAML file
-docker run -d -p 9090:9090 -v ./utilities/prometheus.yml:/etc/prometheus/prometheus.yml prom/prometheus
-
-# Run Grafana container
-docker run -d -p 3000:3000 --name=grafana grafana/grafana-oss
+## Run the vertx app container
+docker-compose up -d

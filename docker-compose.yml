@@ -1,0 +1,28 @@
+version: '3'
+
+services:
+  vertx-app:
+    container_name: java-auth-app
+    image: java-vertx-sample:j-v2
+    volumes:
+      - vertx-certs:/certificates
+    ports:
+      - "8888:8888"
+      - "12345:12345"
+
+  prometheus:
+    container_name: prom-metrics
+    image: prom/prometheus
+    ports:
+      - "9090:9090"
+    volumes:
+      - ./utilities/prometheus.yml:/etc/prometheus/prometheus.yml
+      - vertx-certs:/etc/prometheus/certificates
+
+  grafana:
+    image: grafana/grafana-oss
+    ports:
+      - "3000:3000"
+    container_name: grafana
+volumes:
+  vertx-certs:

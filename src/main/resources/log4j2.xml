@@ -1,18 +1,48 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!-- Extra logging related to initialization of Log4j.
- Set to debug or trace if log4j initialization is failing. -->
-<Configuration status="warn">
+<Configuration status="WARN" monitorInterval="30">
+    <Properties>
+        <Property name="LOG_PATTERN">%d{yyyy-MM-dd HH:mm:ss.SSS} [%t] %-5level %logger{36} - %msg%n</Property>
+        <Property name="LOG_DIR">logs</Property>
+    </Properties>
+
     <Appenders>
-        <!-- Console appender configuration -->
-        <Console name="console" target="SYSTEM_OUT">
-            <PatternLayout
-                    pattern="%d{yyyy-MM-dd HH:mm:ss} %-5p %c{1}:%L - %m%n" />
+        <!-- Console Appender -->
+        <Console name="Console" target="SYSTEM_OUT">
+            <PatternLayout pattern="${LOG_PATTERN}"/>
         </Console>
+
+        <!-- Rolling File Appender -->
+        <RollingFile name="RollingFile" fileName="${LOG_DIR}/app.log"
+                     filePattern="${LOG_DIR}/app-%d{yyyy-MM-dd}.log.gz">
+            <PatternLayout pattern="${LOG_PATTERN}"/>
+            <Policies>
+                <TimeBasedTriggeringPolicy />
+            </Policies>
+            <DefaultRolloverStrategy max="10"/>
+        </RollingFile>
     </Appenders>
+
     <Loggers>
-        <!-- Root logger referring to console appender -->
-        <Root level="info" additivity="false">
-            <AppenderRef ref="console" />
+        <!-- Root Logger -->
+        <Root level="INFO">
+            <AppenderRef ref="Console"/>
+            <AppenderRef ref="RollingFile"/>
         </Root>
+
+        <!-- Specific Loggers -->
+        <!-- Uncomment and customize as needed -->
+        <!--
+        <Logger name="com.example.package" level="DEBUG" additivity="false">
+            <AppenderRef ref="RollingFile"/>
+        </Logger>
+        -->
+
+        <!-- Loggers for specific Vert.x components -->
+        <!-- Uncomment and customize as needed -->
+        <!--
+        <Logger name="io.vertx" level="INFO" additivity="false">
+            <AppenderRef ref="RollingFile"/>
+        </Logger>
+        -->
     </Loggers>
 </Configuration>

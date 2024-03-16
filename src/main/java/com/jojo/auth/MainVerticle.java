@@ -66,8 +66,8 @@ public class MainVerticle extends AbstractVerticle {
                     HttpServerOptions options = new HttpServerOptions()
                             .setSsl(true)
                             .setKeyCertOptions(new PemKeyCertOptions()
-                                    .setCertPath("src/main/resources/cert/certificates/server.crt")
-                                    .setKeyPath("src/main/resources/cert/certificates/server.key"));
+                                    .setCertPath("cert/certificates/server.crt")
+                                    .setKeyPath("cert/certificates/server.key"));
 
                     // Start the HTTP server
                     vertx.createHttpServer(options)

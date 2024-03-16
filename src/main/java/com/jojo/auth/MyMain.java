@@ -21,6 +21,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 
+
 public class MyMain {
     private static final Logger log = LogManager.getLogger(MyMain.class.getName());
 
@@ -63,7 +64,7 @@ public class MyMain {
         vertx.executeBlocking(blockingCodeHandler -> {
             try {
                 // Run your bash script here
-                ProcessBuilder processBuilder = new ProcessBuilder("sh", "src/main/resources/cert/executeCert.sh");
+                ProcessBuilder processBuilder = new ProcessBuilder("sh", "cert/executeCert.sh");
                 processBuilder.redirectErrorStream(true); // Merge stdout and stderr
                 Process process = processBuilder.start();
 

@@ -3,18 +3,47 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Web site with public and private pages</title>
+    <title>Blog Homepage</title>
     <style>
         body {
             font-family: Arial, sans-serif;
-            background-color: #f4f4f4;
             margin: 0;
             padding: 0;
+            background-color: #f4f4f4;
+        }
+        .navbar {
             display: flex;
-            justify-content: center;
+            justify-content: space-between;
             align-items: center;
-            height: 100vh;
-            background-image: linear-gradient(to bottom right, #3498db, #9b59b6);
+            background-color: #333;
+            padding: 10px 20px;
+            color: #fff;
+        }
+        .logo {
+            display: flex;
+            align-items: center;
+        }
+        .logo img {
+            width: 40px;
+            margin-right: 10px;
+        }
+        .nav-links {
+            display: flex;
+        }
+        .nav-links a {
+            padding: 10px 20px;
+            text-decoration: none;
+            color: #fff;
+        }
+        .nav-links a:hover {
+            background-color: #ddd;
+            color: black;
+        }
+        .test {
+            margin-right: 20px;
+        }
+        .content {
+            padding: 20px;
         }
         .container {
             background-color: #fff;
@@ -22,9 +51,13 @@
             box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
             padding: 20px;
             text-align: center;
+            margin-top: 20px;
         }
         h1 {
             margin-bottom: 20px;
+        }
+        p {
+            color: #555;
         }
         a {
             display: inline-block;
@@ -39,14 +72,42 @@
         a:hover {
             background-color: #0056b3;
         }
+        .footer {
+            background-color: #333;
+            color: #fff;
+            padding: 20px;
+            text-align: center;
+            position: fixed;
+            bottom: 0;
+            width: 100%;
+        }
     </style>
 </head>
 <body>
-<div class="container">
-    <h1>Web site with public and private pages</h1>
-    <a href="private/private_page.html">Private page - login is required</a>
-    <br><br>
-    <a href="page1.html">Public page - no login required</a>
+<div class="navbar">
+    <div class="logo">
+        <img src="bird_2.jpg" alt="Logo">
+        <h1>Blog Site Name</h1>
+    </div>
+    <div class="nav-links">
+        <a href="#" class="active">Home</a>
+        <a href="page1.html">About</a>
+        <a href="#">Blog</a>
+        <a href="#">Contact</a>
+    </div>
+    <div class="test">
+        <a href="private/private_page.html">Login</a>
+    </div>
+</div>
+<div class="content">
+    <div class="container">
+        <h1>Welcome to Our Blog</h1>
+        <p>This is a sample homepage for a blog. You can navigate using the navbar above.</p>
+    </div>
+</div>
+<div class="footer">
+    <p>© 2022 Your Blog. All rights reserved.</p>
+    <p>Contact: info@yourblog.com | Phone: +1 (123) 456-7890</p>
 </div>
 </body>
 </html>
